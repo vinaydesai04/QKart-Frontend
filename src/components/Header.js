@@ -10,7 +10,6 @@ const Header = ({ children, hasHiddenAuthButtons }) => {
 
   const [username, setUsername] = useState(localStorage.getItem("username"));
 
-  // Keep username in sync with localStorage on each render
   useEffect(() => {
     setUsername(localStorage.getItem("username"));
   });
@@ -23,7 +22,7 @@ const Header = ({ children, hasHiddenAuthButtons }) => {
 
   const handleLogout = () => {
     localStorage.clear();
-    setUsername(null);        // force Header to re-render to logged-out view
+    setUsername(null);
     history.push("/");
   };
 

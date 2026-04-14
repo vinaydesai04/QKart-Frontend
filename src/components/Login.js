@@ -20,13 +20,8 @@ const Login = () => {
 
   const [loading, setLoading] = useState(false);
 
-  // TODO: CRIO_TASK_MODULE_LOGIN - Fetch the API response
-  /**
-   * Perform the Login API call
-   * @param {{ username: string, password: string }} formData
-   */
+  // Perform the Login API call
   const login = async (formData) => {
-    // Run validation; do not call API if it fails
     if (!validateInput(formData)) {
       return;
     }
@@ -42,19 +37,13 @@ const Login = () => {
         }
       );
 
-      // 201 success
       if (response.status === 201) {
         enqueueSnackbar("Logged in successfully", { variant: "success" });
-      
-        console.log(response.data); // check actual keys once
-      
-        const { token, balance } = response.data;
-        const username =
-          response.data.username || response.data.name || response.data.userName;
-      
+
+        const { token, username, balance } = response.data;
         persistLogin(token, username, balance);
-      
-        history.push("/");
+
+        history.push("/"); // redirect to products page
       }
     } catch (error) {
       if (error.response && error.response.status === 400) {
@@ -70,13 +59,7 @@ const Login = () => {
     }
   };
 
-  // TODO: CRIO_TASK_MODULE_LOGIN - Validate the input
-  /**
-   * Validate the input values so that any bad or illegal values are not passed to the backend.
-   *
-   * @param {{ username: string, password: string }} data
-   * @returns {boolean}
-   */
+  // Validate the input values
   const validateInput = (data) => {
     if (!data.username) {
       enqueueSnackbar("Username is a required field", { variant: "warning" });
@@ -91,14 +74,7 @@ const Login = () => {
     return true;
   };
 
-  // TODO: CRIO_TASK_MODULE_LOGIN - Persist user's login information
-  /**
-   * Store the login information so that it can be used to identify the user in subsequent API calls
-   *
-   * @param {string} token
-   * @param {string} username
-   * @param {string} balance
-   */
+  // Persist user's login information
   const persistLogin = (token, username, balance) => {
     localStorage.setItem("token", token);
     localStorage.setItem("username", username);
@@ -151,7 +127,11 @@ const Login = () => {
             onClick={() => login(formData)}
             disabled={loading}
           >
-            {loading ? <CircularProgress size={24} color="inherit" /> : "LOGIN TO QKART"}
+            {loading ? (
+              <CircularProgress size={24} color="inherit" />
+            ) : (
+              "LOGIN TO QKART"
+            )}
           </Button>
 
           <p className="secondary-action">

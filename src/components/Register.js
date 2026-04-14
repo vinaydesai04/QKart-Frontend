@@ -7,6 +7,7 @@ import { config } from "../App";
 import Footer from "./Footer";
 import Header from "./Header";
 import "./Register.css";
+import { useHistory, Link } from "react-router-dom";
 
 const Register = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -149,7 +150,6 @@ const Register = () => {
       <Box className="content">
         <Stack spacing={2} className="form">
           <h2 className="title">Register</h2>
-
           <TextField
             id="username"
             label="Username"
@@ -205,11 +205,11 @@ const Register = () => {
           </Button>
 
           <p className="secondary-action">
-            Already have an account?{" "}
-            <a className="link" href="#">
-              Login here
-            </a>
-          </p>
+          Already have an account?{" "}
+          <Link to="/login" className="link">
+            Login here
+          </Link>
+        </p>
         </Stack>
       </Box>
       <Footer />

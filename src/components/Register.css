@@ -1,11 +1,10 @@
-/* TODO: CRIO_TASK_MODULE_REGISTER - For screens of min width 768px, display the form content to the right end of the screen */
 .content {
   background-image: url("../assets/hero_image.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   display: flex;
-  justify-content: center;
+  justify-content: center;   /* center on small screens */
   align-items: center;
   height: 70vh;
 }
@@ -46,14 +45,20 @@
 }
 
 .button {
-    background-color: #00a278 !important;
+  background-color: #00a278 !important;
 }
 
 .button:hover {
-    background-color: #00845c !important;
+  background-color: #00845c !important;
 }
 
+/* Milestone-2 requirement */
 @media screen and (min-width: 768px) {
+  .content {
+    justify-content: flex-end;  /* push form to right */
+    padding-right: 4rem;        /* adjust spacing to match screenshot */
+  }
+
   .form {
     min-width: 24rem;
   }

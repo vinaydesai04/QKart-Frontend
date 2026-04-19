@@ -6,7 +6,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from "./theme";
 
 export const config = {
-  endpoint: `http://52.66.222.19:8082/api/v1`,
+  endpoint: `http://65.1.129.26:8082/api/v1`,
 };
 
 function App() {

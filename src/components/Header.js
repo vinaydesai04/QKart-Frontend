@@ -41,25 +41,35 @@ const Header = ({ children, hasHiddenAuthButtons }) => {
         >
           Back to explore
         </Button>
-      ) : isLoggedIn ? (
-        <Stack direction="row" spacing={2} alignItems="center">
-          <Avatar src="avatar.png" alt={username || "user"} />
-          <span>{username}</span>
-          <Button variant="text" onClick={handleLogout}>
-            Logout
-          </Button>
-        </Stack>
       ) : (
-        <Stack direction="row" spacing={2}>
-          <Button variant="text" onClick={() => history.push("/login")}>
-            Login
-          </Button>
-          <Button
-            variant="contained"
-            onClick={() => history.push("/register")}
-          >
-            Register
-          </Button>
+        <Stack
+          direction="row"
+          spacing={2}
+          alignItems="center"
+          className="header-right"
+        >
+          {children}
+          {isLoggedIn ? (
+            <>
+              <Avatar src="avatar.png" alt={username || "user"} />
+              <span>{username}</span>
+              <Button variant="text" onClick={handleLogout}>
+                Logout
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button variant="text" onClick={() => history.push("/login")}>
+                Login
+              </Button>
+              <Button
+                variant="contained"
+                onClick={() => history.push("/register")}
+              >
+                Register
+              </Button>
+            </>
+          )}
         </Stack>
       )}
     </Box>

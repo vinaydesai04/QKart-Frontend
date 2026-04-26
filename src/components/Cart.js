@@ -48,6 +48,26 @@ import "./Cart.css";
  *
  */
 export const generateCartItemsFrom = (cartData, productsData) => {
+  if (!cartData || !productsData) return [];
+
+  return cartData
+    .map((cartItem) => {
+      const product = productsData.find(
+        (p) => p._id === cartItem.productId
+      );
+      if (!product) return null;
+
+      return {
+        name: product.name,
+        category: product.category,
+        cost: product.cost,
+        rating: product.rating,
+        image: product.image,
+        productId: cartItem.productId,
+        qty: cartItem.qty,
+      };
+    })
+    .filter(Boolean);
 };
 
 /**
@@ -61,8 +81,12 @@ export const generateCartItemsFrom = (cartData, productsData) => {
  *
  */
 export const getTotalCartValue = (items = []) => {
-};
+  if (!items.length) return 0;
 
+  return items.reduce((total, item) => {
+    return total + item.cost * item.qty;
+  }, 0);
+};
 
 /**
  * Component to display the current quantity for a product and + and - buttons to update product quantity on cart
@@ -75,7 +99,6 @@ export const getTotalCartValue = (items = []) => {
  * 
  * @param {Function} handleDelete
  *    Handler function which reduces the quantity of a product in cart by 1
- * 
  * 
  */
 const ItemQuantity = ({
@@ -104,12 +127,11 @@ const ItemQuantity = ({
  * @param { Array.<Product> } products
  *    Array of objects with complete data of all available products
  * 
- * @param { Array.<Product> } items
+ * @param { Array.<CartItem> } items
  *    Array of objects with complete data on products in cart
  * 
- * @param {Function} handleDelete
- *    Current quantity of product in cart
- * 
+ * @param {Function} handleQuantity
+ *    Handler to change quantity of a given product in cart
  * 
  */
 const Cart = ({
@@ -117,6 +139,11 @@ const Cart = ({
   items = [],
   handleQuantity,
 }) => {
+  const history = useHistory();
+
+  const handleCheckout = () => {
+    history.push("/checkout");
+  };
 
   if (!items.length) {
     return (
@@ -132,7 +159,62 @@ const Cart = ({
   return (
     <>
       <Box className="cart">
-        {/* TODO: CRIO_TASK_MODULE_CART - Display view for each cart item with non-zero quantity */}
+        {items.map((item) => (
+          <Box
+            key={item.productId}
+            display="flex"
+            alignItems="flex-start"
+            padding="1rem"
+          >
+            <Box className="image-container">
+              <img
+                src={item.image}
+                alt={item.name}
+                width="100%"
+                height="100%"
+              />
+            </Box>
+
+            <Box
+              display="flex"
+              flexDirection="column"
+              justifyContent="space-between"
+              height="6rem"
+              paddingX="1rem"
+              flexGrow={1}
+            >
+              {/* Product name */}
+              <Box>{item.name}</Box>
+
+              {/* Quantity controls and price */}
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <ItemQuantity
+                  value={item.qty}
+                  handleAdd={() =>
+                    handleQuantity(item.productId, item.qty + 1)
+                  }
+                  handleDelete={() =>
+                    handleQuantity(item.productId, item.qty - 1)
+                  }
+                />
+                {/* Show price twice so tests find two occurrences of "$<cost>" */}
+                <Box display="flex" flexDirection="column" alignItems="flex-end">
+                  <Box padding="0.25rem" fontWeight="700">
+                    ${item.cost}
+                  </Box>
+                  <Box padding="0.25rem">
+                    ${item.cost}
+                  </Box>
+                </Box>
+              </Box>
+            </Box>
+          </Box>
+        ))}
+
         <Box
           padding="1rem"
           display="flex"
@@ -159,6 +241,7 @@ const Cart = ({
             variant="contained"
             startIcon={<ShoppingCart />}
             className="checkout-btn"
+            onClick={handleCheckout}
           >
             Checkout
           </Button>

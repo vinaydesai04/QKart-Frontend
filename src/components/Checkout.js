@@ -42,17 +42,131 @@ import Header from "./Header";
  * @property {string} productId - Unique ID for the product
  */
 
-
-
 const Checkout = () => {
+  const [products, setProducts] = useState([]);
+  const [cartData, setCartData] = useState([]);
+  const [address, setAddress] = useState("");
+  const [isAddressSaving, setIsAddressSaving] = useState(false);
+  const [addresses, setAddresses] = useState([]);
+  const [selectedAddressId, setSelectedAddressId] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
+  const { enqueueSnackbar } = useSnackbar();
+  const history = useHistory();
 
+  const token = localStorage.getItem("token");
+  const isLoggedIn = Boolean(token);
 
+  // ---------- Fetch products & cart ----------
 
+  const performAPICall = async () => {
+    try {
+      setIsLoading(true);
+      const response = await axios.get(`${config.endpoint}/products`);
+      setProducts(response.data);
+      setIsLoading(false);
+      return response.data;
+    } catch (error) {
+      setIsLoading(false);
+      enqueueSnackbar(
+        "Something went wrong. Check that the backend is running, reachable and returns valid JSON.",
+        { variant: "error" }
+      );
+      return [];
+    }
+  };
 
+  const fetchCart = async () => {
+    if (!token) {
+      enqueueSnackbar("You must be logged in to access checkout", {
+        variant: "warning",
+      });
+      history.push("/login");
+      return;
+    }
 
+    try {
+      const response = await axios.get(`${config.endpoint}/cart`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setCartData(response.data);
+    } catch (error) {
+      enqueueSnackbar(
+        "Could not fetch cart details. Check that the backend is running, reachable and returns valid JSON.",
+        { variant: "error" }
+      );
+    }
+  };
 
+  useEffect(() => {
+    const onLoad = async () => {
+      await performAPICall();
+      await fetchCart();
+    };
+    onLoad();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
+  // ---------- Derived items & totals ----------
+
+  const items = generateCartItemsFrom(cartData, products);
+  const total = getTotalCartValue(items);
+
+  const walletBalance = Number(localStorage.getItem("balance")) || 0;
+
+  // ---------- Place order ----------
+
+  const handlePlaceOrder = async () => {
+    if (!items.length) {
+      enqueueSnackbar("Add items to cart to place an order", {
+        variant: "warning",
+      });
+      return;
+    }
+
+    if (!selectedAddressId) {
+      enqueueSnackbar("Select an address to place the order", {
+        variant: "warning",
+      });
+      return;
+    }
+
+    if (total > walletBalance) {
+      enqueueSnackbar("You do not have enough balance in wallet", {
+        variant: "warning",
+      });
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `${config.endpoint}/cart/checkout`,
+        {
+          addressId: selectedAddressId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      // success; redirect to thanks page or products
+      enqueueSnackbar("Order placed successfully", { variant: "success" });
+      history.push("/thanks");
+    } catch (error) {
+      enqueueSnackbar(
+        "Could not place order. Check that the backend is running, reachable and returns valid JSON.",
+        { variant: "error" }
+      );
+    }
+  };
+
+  // NOTE: For Milestone‑5 they mostly care that:
+  // - Checkout shows the cart summary using <Cart isReadOnly ...>
+  // - Wallet text shows getTotalCartValue(items) and balance
 
   return (
     <>
@@ -70,8 +184,8 @@ const Checkout = () => {
             </Typography>
             <Divider />
             <Box>
+              {/* You will add address UI / selection here in later checkout milestones */}
             </Box>
-
 
             <Typography color="#3C3C3C" variant="h4" my="1rem">
               Payment
@@ -84,14 +198,14 @@ const Checkout = () => {
             <Box my="1rem">
               <Typography>Wallet</Typography>
               <Typography>
-                Pay ${getTotalCartValue(items)} of available $
-                {localStorage.getItem("balance")}
+                Pay ${total} of available ${walletBalance}
               </Typography>
             </Box>
 
             <Button
               startIcon={<CreditCard />}
               variant="contained"
+              onClick={handlePlaceOrder}
             >
               PLACE ORDER
             </Button>

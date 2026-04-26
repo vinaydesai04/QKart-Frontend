@@ -4,9 +4,10 @@ import Login from "./components/Login";
 import Products from "./components/Products";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "./theme";
+import Checkout from "./components/Checkout";
 
 export const config = {
-  endpoint: `http://65.1.129.26:8082/api/v1`,
+  endpoint: `http://13.201.97.33:8082/api/v1`,
 };
 
 function App() {
@@ -22,6 +23,9 @@ function App() {
           </Route>
           <Route path="/login">
             <Login />
+          </Route>
+          <Route path="/checkout">
+            <Checkout />
           </Route>
         </Switch>
       </div>

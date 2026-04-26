@@ -13,7 +13,6 @@ import { config } from "../App";
 import Footer from "./Footer";
 import Header from "./Header";
 import "./Products.css";
-<<<<<<< ours
 import ProductCard from "./ProductCard";
 import Cart, { generateCartItemsFrom } from "./Cart";
 
@@ -152,6 +151,7 @@ const Products = () => {
           },
         }
       );
+      // backend returns updated raw cart; store it for generateCartItemsFrom
       setCartData(response.data);
     } catch (error) {
       if (error.response && error.response.data && error.response.data.message) {
@@ -194,103 +194,10 @@ const Products = () => {
   const cartItems = generateCartItemsFrom(cartData, products);
 
   // ---------------- JSX ----------------
-=======
-
-
-/**
- * @typedef {Object} CartItem -  - Data on product added to cart
- * 
- * @property {string} name - The name or title of the product in cart
- * @property {string} qty - The quantity of product added to cart
- * @property {string} category - The category that the product belongs to
- * @property {number} cost - The price to buy the product
- * @property {number} rating - The aggregate rating of the product (integer out of five)
- * @property {string} image - Contains URL for the product image
- * @property {string} productId - Unique ID for the product
- */
-
-const Products = () => {
-
-  /**
-   * Make API call to get the products list and store it to display the products
-   *
-   * @returns { Array.<Product> }
-   *      Array of objects with complete data on all available products
-   *
-   * API endpoint - "GET /products"
-   *
-   * Example for successful response from backend:
-   * HTTP 200
-   * [
-   *      {
-   *          "name": "iPhone XR",
-   *          "category": "Phones",
-   *          "cost": 100,
-   *          "rating": 4,
-   *          "image": "https://i.imgur.com/lulqWzW.jpg",
-   *          "_id": "v4sLtEcMpzabRyfx"
-   *      },
-   *      {
-   *          "name": "Basketball",
-   *          "category": "Sports",
-   *          "cost": 100,
-   *          "rating": 5,
-   *          "image": "https://i.imgur.com/lulqWzW.jpg",
-   *          "_id": "upLK9JbQ4rMhTwt4"
-   *      }
-   * ]
-   *
-   * Example for failed response from backend:
-   * HTTP 500
-   * {
-   *      "success": false,
-   *      "message": "Something went wrong. Check the backend console for more details"
-   * }
-   */
-  const performAPICall = async () => {
-  };
-
-  /**
-   * Definition for search handler
-   * This is the function that is called on adding new search keys
-   *
-   * @param {string} text
-   *    Text user types in the search bar. To filter the displayed products based on this text.
-   *
-   * @returns { Array.<Product> }
-   *      Array of objects with complete data on filtered set of products
-   *
-   * API endpoint - "GET /products/search?value=<search-query>"
-   *
-   */
-  const performSearch = async (text) => {
-  };
-
-  /**
-   * Definition for debounce handler
-   * With debounce, this is the function to be called whenever the user types text in the searchbar field
-   *
-   * @param {{ target: { value: string } }} event
-   *    JS event object emitted from the search input field
-   *
-   * @param {NodeJS.Timeout} debounceTimeout
-   *    Timer id set for the previous debounce call
-   *
-   */
-  const debounceSearch = (event, debounceTimeout) => {
-  };
-
-
-
-
-
-
->>>>>>> theirs
 
   return (
     <div>
       <Header>
-<<<<<<< ours
         <TextField
           className="search-desktop"
           size="small"
@@ -309,11 +216,6 @@ const Products = () => {
       </Header>
 
       {/* Search view for mobiles */}
-=======
-
-      </Header>
-
->>>>>>> theirs
       <TextField
         className="search-mobile"
         size="small"
@@ -327,12 +229,11 @@ const Products = () => {
         }}
         placeholder="Search for items/categories"
         name="search"
-<<<<<<< ours
         value={searchText}
         onChange={(event) => debounceSearch(event, debounceTimeout)}
       />
 
-      {/* Hero section – same as original */}
+      {/* Hero section */}
       <Grid container>
         <Grid item className="product-grid">
           <Box className="hero">
@@ -384,16 +285,9 @@ const Products = () => {
         </Grid>
       )}
 
-=======
-      />
->>>>>>> theirs
       <Footer />
     </div>
   );
 };
 
-<<<<<<< ours
 export default Products;
-=======
-export default Products;
->>>>>>> theirs

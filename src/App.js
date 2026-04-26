@@ -5,6 +5,7 @@ import Products from "./components/Products";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "./theme";
 import Checkout from "./components/Checkout";
+import Thanks from "./components/Thanks"
 
 export const config = {
   endpoint: `http://13.201.97.33:8082/api/v1`,
@@ -26,6 +27,9 @@ function App() {
           </Route>
           <Route path="/checkout">
             <Checkout />
+          </Route>
+          <Route path="/thanks">
+            <Thanks />
           </Route>
         </Switch>
       </div>

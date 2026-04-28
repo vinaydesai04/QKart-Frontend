@@ -1,6 +1,7 @@
 // 1. Patch for modern Node.js versions on Render
 const util = require('util');
 util.isDate = util.types.isDate; 
+util.isRegExp = util.types.isRegExp; // <-- Add this new line
 
 // 2. Standard database setup
 const nedb = require('nedb');

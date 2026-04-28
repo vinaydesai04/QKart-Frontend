@@ -1,6 +1,6 @@
 # 🛒 QKart - E-Commerce Storefront
 
-[![Live Demo](https://img.shields.io/badge/demo-online-green.svg)](https://qkart-frontend-inky.vercel.app/)]
+[![Live Demo](https://img.shields.io/badge/demo-online-green.svg)](https://qkart-frontend-inky.vercel.app/)
 
 > A responsive, full-stack e-commerce application featuring product browsing, secure user authentication, and real-time cart management.
 > 

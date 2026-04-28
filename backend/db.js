@@ -1,7 +1,11 @@
+// 1. Patch for modern Node.js versions on Render
+const util = require('util');
+util.isDate = util.types.isDate; 
+
+// 2. Standard database setup
 const nedb = require('nedb');
 const path = require('path');
 
-// Use path.join to create absolute paths based on the current directory
 const usersDbPath = path.join(__dirname, 'db', 'users.db');
 const productsDbPath = path.join(__dirname, 'db', 'products.db');
 

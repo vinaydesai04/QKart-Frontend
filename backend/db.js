@@ -1,6 +1,12 @@
 const nedb = require('nedb');
-const users = new nedb({ filename: 'db/users.db', autoload: true })
-const products = new nedb({ filename: 'db/products.db', autoload: true });
+const path = require('path');
 
-module.exports.users = users
-module.exports.products = products
+// Use path.join to create absolute paths based on the current directory
+const usersDbPath = path.join(__dirname, 'db', 'users.db');
+const productsDbPath = path.join(__dirname, 'db', 'products.db');
+
+const users = new nedb({ filename: usersDbPath, autoload: true });
+const products = new nedb({ filename: productsDbPath, autoload: true });
+
+module.exports.users = users;
+module.exports.products = products;
